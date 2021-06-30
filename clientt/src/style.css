@@ -21,7 +21,7 @@
     color: #FFFFFF;
     box-shadow: 0 12px 16px 0 rgba(0, 0, 0, 0.24), 0 17px 50px 0 rgba(0, 0, 0, 0.19);
     border: none;
-    padding: 20px;
+    padding: 18px;
     font-size: 30px;
     width: 200px;
     cursor: pointer;
@@ -60,7 +60,7 @@
 
 .App__result {
     width: 24rem;
-    padding: 2em;
+    padding: 2px;
     border-radius: 1em;
     background: #ffe4e6;
     /* test */

@@ -1,30 +1,23 @@
-.body {
-    display: flexbox;
+.App {
+    font-family: sans-serif;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
-.button {
-    background: linear-gradient(to bottom, #544dbd 5%, #544dbd 100%);
-    border-radius: 3px;
-    display: inline-block;
-    cursor: pointer;
-    color: #ffffff;
-    font-family: Trebuchet MS;
-    font-size: 20px;
-    font-weight: bold;
-    padding: 10px 16px;
-    text-decoration: none;
+.App__image {
+    width: 50vw;
+    height: 50vh;
+    object-fit: contain;
+    border: black 3px solid;
 }
 
-.button:hover {
-    background: linear-gradient(to bottom, #6a6cca 5%, #6a6cca 100%);
-}
-
-.button:active {
-    position: relative;
-    top: 1px;
-}
-
-.image {
+.App__upload {
+    border: none;
     padding: 10px;
-    border-color: #544dbd;
+    cursor: pointer;
+    background-color: #7f2da6;
+    border-radius: 10%;
 }

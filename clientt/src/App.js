@@ -6,7 +6,7 @@ import Resultcpn from './components/resultcpn.js'
 import Buttoncpn from './components/buttoncpn';
 const App = () => {
   return (
-    <div className="body">
+    <div >
 
     <Buttoncpn />
     <Imagecpn />

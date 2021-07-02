@@ -6,105 +6,49 @@
  *  tree.
  */
 
-'use strict';
+"use strict";
+const constraints = window.constraints = {
+    audio: false,
+    video: true
+};
 
-const videoElement = document.querySelector('video');
-const audioInputSelect = document.querySelector('select#audioSource');
-const audioOutputSelect = document.querySelector('select#audioOutput');
-const videoSelect = document.querySelector('select#videoSource');
-const selectors = [audioInputSelect, audioOutputSelect, videoSelect];
-
-audioOutputSelect.disabled = !('sinkId' in HTMLMediaElement.prototype);
-
-function gotDevices(deviceInfos) {
-    // Handles being called several times to update labels. Preserve values.
-    const values = selectors.map(select => select.value);
-    selectors.forEach(select => {
-        while (select.firstChild) {
-            select.removeChild(select.firstChild);
-        }
-    });
-    for (let i = 0; i !== deviceInfos.length; ++i) {
-        const deviceInfo = deviceInfos[i];
-        const option = document.createElement('option');
-        option.value = deviceInfo.deviceId;
-        if (deviceInfo.kind === 'audioinput') {
-            option.text = deviceInfo.label || `microphone ${audioInputSelect.length + 1}`;
-            audioInputSelect.appendChild(option);
-        } else if (deviceInfo.kind === 'audiooutput') {
-            option.text = deviceInfo.label || `speaker ${audioOutputSelect.length + 1}`;
-            audioOutputSelect.appendChild(option);
-        } else if (deviceInfo.kind === 'videoinput') {
-            option.text = deviceInfo.label || `camera ${videoSelect.length + 1}`;
-            videoSelect.appendChild(option);
-        } else {
-            console.log('Some other kind of source/device: ', deviceInfo);
-        }
-    }
-    selectors.forEach((select, selectorIndex) => {
-        if (Array.prototype.slice.call(select.childNodes).some(n => n.value === values[selectorIndex])) {
-            select.value = values[selectorIndex];
-        }
-    });
-}
-
-navigator.mediaDevices.enumerateDevices().then(gotDevices).catch(handleError);
-
-// Attach audio output device to video element using device/sink ID.
-function attachSinkId(element, sinkId) {
-    if (typeof element.sinkId !== 'undefined') {
-        element.setSinkId(sinkId)
-            .then(() => {
-                console.log(`Success, audio output device attached: ${sinkId}`);
-            })
-            .catch(error => {
-                let errorMessage = error;
-                if (error.name === 'SecurityError') {
-                    errorMessage = `You need to use HTTPS for selecting audio output device: ${error}`;
-                }
-                console.error(errorMessage);
-                // Jump back to first output device in the list as it's the default.
-                audioOutputSelect.selectedIndex = 0;
-            });
-    } else {
-        console.warn('Browser does not support output device selection.');
-    }
-}
-
-function changeAudioDestination() {
-    const audioDestination = audioOutputSelect.value;
-    attachSinkId(videoElement, audioDestination);
-}
-
-function gotStream(stream) {
-    window.stream = stream; // make stream available to console
-    videoElement.srcObject = stream;
-    // Refresh button list in case labels have become available
-    return navigator.mediaDevices.enumerateDevices();
+function handleSuccess(stream) {
+    const video = document.querySelector('video');
+    const videoTracks = stream.getVideoTracks();
+    console.log('Got stream with constraints:', constraints);
+    console.log(`Using video device: ${videoTracks[0].label}`);
+    window.stream = stream; // make variable available to browser console
+    video.srcObject = stream;
 }
 
 function handleError(error) {
-    console.log('navigator.MediaDevices.getUserMedia error: ', error.message, error.name);
-}
-
-function start() {
-    if (window.stream) {
-        window.stream.getTracks().forEach(track => {
-            track.stop();
-        });
+    if (error.name === 'ConstraintNotSatisfiedError') {
+        const v = constraints.video;
+        errorMsg(`The resolution ${v.width.exact}x${v.height.exact} px is not supported by your device.`);
+    } else if (error.name === 'PermissionDeniedError') {
+        errorMsg('Permissions have not been granted to use your camera and ' +
+            'microphone, you need to allow the page access to your devices in ' +
+            'order for the demo to work.');
     }
-    const audioSource = audioInputSelect.value;
-    const videoSource = videoSelect.value;
-    const constraints = {
-        audio: { deviceId: audioSource ? { exact: audioSource } : undefined },
-        video: { deviceId: videoSource ? { exact: videoSource } : undefined }
-    };
-    navigator.mediaDevices.getUserMedia(constraints).then(gotStream).then(gotDevices).catch(handleError);
+    errorMsg(`getUserMedia error: ${error.name}`, error);
 }
 
-audioInputSelect.onchange = start;
-audioOutputSelect.onchange = changeAudioDestination;
+function errorMsg(msg, error) {
+    const errorElement = document.querySelector('#errorMsg');
+    errorElement.innerHTML += `<p>${msg}</p>`;
+    if (typeof error !== 'undefined') {
+        console.error(error);
+    }
+}
 
-videoSelect.onchange = start;
+async function init(e) {
+    try {
+        const stream = await navigator.mediaDevices.getUserMedia(constraints);
+        handleSuccess(stream);
+        e.target.disabled = true;
+    } catch (e) {
+        handleError(e);
+    }
+}
 
-start();
+document.querySelector('#showVideo').addEventListener('click', e => init(e));

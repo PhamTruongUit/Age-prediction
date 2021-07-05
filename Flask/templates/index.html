@@ -1,0 +1,90 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Fical Age</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="shortcut icon" href="https://student.uit.edu.vn/favicon.ico" type="image/vnd.microsoft.icon" />
+  <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"> -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script> -->
+
+
+  <style>
+    *{
+      box-sizing: border-box;
+    }
+    .container{
+      margin: 30px auto;
+      height: auto;
+      width: 600px;
+      border-radius: 8px;
+      box-shadow: 0 0 15px 8px #e1dbdb;
+    }
+
+    .title{
+      text-align: center;
+      padding: 15px;
+    }
+    
+    .form-input{
+      display: flex;
+    }
+    .form-image{
+      width: 50%;
+      margin: 20px;
+      height: 250px;
+      border: 1px solid #c6c5c5;
+    }
+    .form-video{
+      width: 50%;
+      margin: 20px;
+      height: 250px;
+      border: 1px solid #c6c5c5;
+    }
+    .btn-submit{
+      display: block;
+      margin: auto;
+    }
+
+    .res{
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1 class="title">Facial Age</h1>
+
+    <form class="form" method="POST" enctype="multipart/form-data">
+
+      <div class="form-input">
+        <div class="form-group form-image">
+          <label class="control-label col-sm-2" for="pwd">Upload image :</label>
+          <br>
+          <input type="file", name="file">
+        </div>
+  
+  
+        <div class="form-group form-video">
+          Upload video
+        </div>
+      </div>
+      
+
+      <button type="submit" class="btn-submit">Submit</button>
+      <br>
+    </form>
+
+    {% if prediction %}
+    <div class="res">
+      <img src="{{img_path}}" height="400px" width="400px">
+      <h2> Your Prediction   : <i> {{prediction}} </i></h2>
+    </div>
+    {% endif %}
+
+  </div>
+
+</body>

@@ -1,0 +1,5 @@
+children : 0-10
+teenage : 11-18
+Youth: 19 - 34
+midde: 35 - 60
+old: 60+ 

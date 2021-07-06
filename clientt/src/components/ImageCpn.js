@@ -64,7 +64,7 @@ axios({
         />
       </MagicDropZone>
 
-      <div className="alert alert-primary">{result}</div>
+      <div className={resultStyle} > {result}</div>
      
     </div>
   );

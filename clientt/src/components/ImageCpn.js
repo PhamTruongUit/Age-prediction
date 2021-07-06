@@ -5,6 +5,7 @@ import axios from "axios";
 
 export default function ImageCpn() {
   const [result, setResult] = useState("Khung kết quả");
+  const [resultStyle, setResultStyle] = useState("alert alert-primary")
   const [image, setImage] = useState(null);
 
   function onDrop(accepted, rejected, links) {
@@ -36,7 +37,7 @@ axios({
       .then(function (response) {
         const res_age = response['data'].age; 
         // console.log(res_age);
-        const resultss = 'Độ tuổi của người trong ảnh là :' + res_age;
+        const resultss = 'Độ tuổi của người trong ảnh là: ' + res_age;
         setResult(resultss);
       })
       .catch(function (error){

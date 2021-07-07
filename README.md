@@ -5,3 +5,5 @@
 -	Nguyễn Kiều Vinh		: 18521653
 -	Nguyễn Văn Thịnh	  : 18521448
 -	Nguyễn Minh Quang 	: 18521299
+
+Link dataset: Facial Age (https://www.kaggle.com/frabbisw/facial-age)
